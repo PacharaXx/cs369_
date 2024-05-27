@@ -3,6 +3,7 @@
 import LoginPage from "./login";
 import React from "react";
 import axios from "axios";
+import ProductPage from "./product";
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
@@ -25,30 +26,7 @@ export default function Home() {
 
   return (
     <div>
-      {isLoggedIn ? (
-        <div>
-          <h1>Welcome, {user?.message}</h1>
-          <button
-            onClick={() => {
-              axios
-                .post("http://localhost:3001/logout", null, {
-                  withCredentials: true,
-                })
-                .then(() => {
-                  setIsLoggedIn(false);
-                  setUser(null);
-                })
-                .catch((err) => {
-                  setError(err);
-                });
-            }}
-          >
-            Logout
-          </button>
-        </div>
-      ) : (
-        <LoginPage />
-      )}
+      {isLoggedIn ? <ProductPage /> : <LoginPage />}
       {error && <div>{error.message}</div>}
     </div>
   );
