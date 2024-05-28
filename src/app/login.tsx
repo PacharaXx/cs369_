@@ -2,10 +2,13 @@
 "use client"; // Add this line at the top
 import React, { useState } from "react";
 import axios from "axios";
+import SweetAlert2 from "react-sweetalert2";
+import styles from "./styles/login.module.css"; // Ensure this file exists and is properly configured
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [status, setStatus] = useState<string>(""); // Type the state properly
   const [messages, setMessages] = useState<string[]>([]);
 
   const handleLogin = async (event: React.FormEvent) => {
@@ -16,28 +19,27 @@ const LoginPage: React.FC = () => {
         { username, password },
         { withCredentials: true }
       );
-      console.log("RES: ", res); // "RES: {status: 200, data: {…}, statusText: 'OK', headers: {…}, config: {…}, …}
       if (res.status === 200) {
         const user = await axios.get("http://localhost:3001/users/", {
           withCredentials: true,
         });
-        // console.log("USER: ", user.data); // "USER: {status: 200, data: {…}, statusText: 'OK', headers: {…}, config: {…}, …}"
-        // redirect
         window.location.href = "/";
+        setStatus("success");
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         console.error("Error response:", error.response);
+        setStatus("error");
         setMessages(error.response.data.messages || ["Login failed"]);
       }
     }
   };
 
   return (
-    <div>
+    <div className={styles.loginContainer}>
       <h1>Login</h1>
-      <form onSubmit={handleLogin}>
-        <div>
+      <form onSubmit={handleLogin} className={styles.loginForm}>
+        <div className={styles.formGroup}>
           <label htmlFor="username">Username:</label>
           <input
             type="text"
@@ -46,9 +48,10 @@ const LoginPage: React.FC = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
+            className={styles.inputField}
           />
         </div>
-        <div>
+        <div className={styles.formGroup}>
           <label htmlFor="password">Password:</label>
           <input
             type="password"
@@ -57,20 +60,23 @@ const LoginPage: React.FC = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            className={styles.inputField}
           />
         </div>
-        <div>
-          <button type="submit">Login</button>
+        <div className={styles.formGroup}>
+          <button type="submit" className={styles.submitButton}>
+            Login
+          </button>
         </div>
       </form>
-      {messages.length > 0 && (
-        <div>
-          {messages.map((msg, index) => (
-            <p key={index} style={{ color: "red" }}>
-              {msg}
-            </p>
-          ))}
-        </div>
+      {status === "error" && (
+        <SweetAlert2
+          show={true}
+          title="Error"
+          text={messages.join(", ")}
+          icon="error"
+          onConfirm={() => setStatus("")} // Reset status on alert confirm
+        />
       )}
     </div>
   );
