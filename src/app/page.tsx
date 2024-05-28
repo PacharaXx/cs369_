@@ -11,6 +11,7 @@ import axios from "axios";
 import ProductsPage from "./pages/ProductsPage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/loading.css"; // Ensure this file exists and is properly configured
+import ProductDetailPage from "./pages/ProductDetailPage";
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
@@ -56,6 +57,12 @@ export default function Home() {
         <Route
           path="/products"
           element={isLoggedIn ? <ProductsPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/product/:id"
+          element={
+            isLoggedIn ? <ProductDetailPage /> : <Navigate to="/login" />
+          }
         />
         <Route
           path="/"

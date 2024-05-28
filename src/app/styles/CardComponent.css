@@ -2,7 +2,23 @@
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem 2.5rem;
     transition: transform 0.2s;
     max-width: 200px;
+    cursor: pointer;
+}
+
+.custom-card:hover{
+    transform: translateY(-5px);
+}
+
+.custom-card-img{
+    object-fit: cover;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.custom-card-link{
+    text-decoration: none;
+    color: #000;
+    
 }
