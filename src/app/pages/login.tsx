@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import SweetAlert2 from "react-sweetalert2";
-import styles from "./styles/login.module.css"; // Ensure this file exists and is properly configured
+import styles from "../styles/login.module.css"; // Ensure this file exists and is properly configured
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");

@@ -1,9 +1,9 @@
 "use client";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import LoginPage from "./login";
+import LoginPage from "./pages/login";
 import React from "react";
 import axios from "axios";
-import ProductsPage from "./products";
+import ProductsPage from "./pages/products";
 import "./styles/loading.css"; // Ensure this file exists and is properly configured
 
 export default function Home() {
