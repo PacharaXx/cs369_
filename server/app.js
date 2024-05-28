@@ -54,7 +54,12 @@ app.get("/", (req, res) => {
 
 app.get("/users", async (req, res) => {
   if (!req.isAuthenticated()) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res
+      .status(401)
+      .json({
+        message: "Unauthorized",
+        isAuthenticated: req.isAuthenticated(),
+      });
   } else {
     // return UserID
     res.json({

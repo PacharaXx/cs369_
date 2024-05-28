@@ -5,10 +5,10 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import LoginPage from "./pages/login";
+import LoginPage from "./pages/LoginPage";
 import React from "react";
 import axios from "axios";
-import ProductsPage from "./pages/products";
+import ProductsPage from "./pages/ProductsPage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/loading.css"; // Ensure this file exists and is properly configured
 
@@ -17,23 +17,23 @@ export default function Home() {
   const [user, setUser] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
 
-  React.useEffect(() => {
-    const checkAuthStatus = () => {
-      axios
-        .get("http://localhost:3001/users/", { withCredentials: true })
-        .then((res) => {
-          setIsLoggedIn(true);
-          setUser(res.data);
-          setLoading(false); // Set loading to false after getting response
-        })
-        .catch((err) => {
-          if (axios.isAxiosError(err) && err.response?.status === 401) {
-            setIsLoggedIn(false);
-            setLoading(false); // Set loading to false if not authenticated
-          }
-        });
-    };
+  const checkAuthStatus = () => {
+    axios
+      .get("http://localhost:3001/users/", { withCredentials: true })
+      .then((res) => {
+        setIsLoggedIn(true);
+        setUser(res.data);
+        setLoading(false); // Set loading to false after getting response
+      })
+      .catch((err) => {
+        if (axios.isAxiosError(err) && err.response?.status === 401) {
+          setIsLoggedIn(false);
+          setLoading(false); // Set loading to false if not authenticated
+        }
+      });
+  };
 
+  React.useEffect(() => {
     // Initial check
     checkAuthStatus();
   }, []);

@@ -10,7 +10,7 @@ export default function ProductsPage() {
       .get("http://localhost:3001/getAllProducts", { withCredentials: true })
       .then((res) => {
         setData(res.data);
-        console.log("DATA: ", res.data);
+        // console.log("DATA: ", res.data);
       })
       .catch((err) => {
         console.error(err);
@@ -22,9 +22,17 @@ export default function ProductsPage() {
       <h1>Products</h1>
       <ul>
         {data &&
-          data.map((product) => (
+          (
+            data as Array<{
+              ProductID: number;
+              Name: string;
+              Price: number;
+              ImageURL: string;
+            }>
+          ).map((product) => (
             <CardComponent
-              key={product.ProductID}
+              key={product.ProductID} // Add key prop here
+              id={product.ProductID}
               title={product.Name}
               price={product.Price}
               imgURL={product.ImageURL}

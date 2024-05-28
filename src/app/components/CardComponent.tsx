@@ -11,7 +11,7 @@ interface CardProps {
 
 const CardComponent: React.FC<CardProps> = ({ id, title, price, imgURL }) => {
   return (
-    <Card className="custom-card">
+    <Card className="custom-card" key={id}>
       <Card.Img variant="top" src={imgURL} />
       <Card.Body>
         <Card.Title>{title}</Card.Title>
