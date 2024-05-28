@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import styles from "./styles/products.module.css"; // Ensure this file exists and is properly configured
+import Card from "./components/card";
 
 export default function ProductsPage() {
   const [data, setData] = React.useState(null);
@@ -23,11 +24,12 @@ export default function ProductsPage() {
       <ul>
         {data &&
           data.map((product) => (
-            <div className={styles.card} key={product.id}>
-              <img src={product.ImageURL} alt={product.Name} />
-              <h2>{product.Name}</h2>
-              <p>{product.Price}</p>
-            </div>
+            <Card
+              key={product.ProductID}
+              title={product.Name}
+              price={product.Price}
+              imgURL={product.ImageURL}
+            />
           ))}
       </ul>
     </div>
