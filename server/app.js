@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt");
 const sql = require("mssql");
 const fs = require("fs");
 const cors = require("cors");
+const path = require("path");
 
 // Require the Passport configuration
 require("./passport-config")(passport);
@@ -40,6 +41,8 @@ app.use(
   })
 );
 
+app.use(express.static(path.join(__dirname, "public")));
+
 // Initialize Passport
 app.use(passport.initialize());
 app.use(passport.session());
@@ -54,12 +57,10 @@ app.get("/", (req, res) => {
 
 app.get("/users", async (req, res) => {
   if (!req.isAuthenticated()) {
-    return res
-      .status(401)
-      .json({
-        message: "Unauthorized",
-        isAuthenticated: req.isAuthenticated(),
-      });
+    return res.status(401).json({
+      message: "Unauthorized",
+      isAuthenticated: req.isAuthenticated(),
+    });
   } else {
     // return UserID
     res.json({
@@ -112,6 +113,12 @@ app.post("/register", async (req, res) => {
   }
 });
 
+// ../public/uploads
+const uploadDir = path.join(__dirname, "..", "public", "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
 // POST route for adding a product with Base64 image input
 app.post("/addProduct", async (req, res) => {
   const {
@@ -143,11 +150,18 @@ app.post("/addProduct", async (req, res) => {
       ""
     );
 
+    // Ensure 'uploads' directory exists
+    const uploadDir = path.join(__dirname, "..", "public", "uploads");
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
     // Decode Base64 image data
     const imgBuffer = Buffer.from(imgProductBase64S, "base64");
-    // Save decoded image to a file (optional, depending on your database schema)
-    const imgProductUrl = `/uploads/${Date.now()}_image.jpg`; // Adjust file extension as per your needs
-    fs.writeFileSync(`./public${imgProductUrl}`, imgBuffer);
+    // Save decoded image to a file
+    const imgProductUrl = `/uploads/${Date.now()}_image.jpg`;
+    const imgPath = path.join(__dirname, "..", "public", imgProductUrl);
+    fs.writeFileSync(imgPath, imgBuffer);
 
     // Start a transaction
     const transaction = new sql.Transaction();
@@ -226,18 +240,20 @@ app.get("/getAllProducts", async (req, res) => {
     return res.status(401).json({ message: "Unauthorized" });
   }
   try {
-    const result = await new sql.Request().query("SELECT * FROM Products");
+    const result = await new sql.Request().query(
+      "SELECT DISTINCT Products.ProductID, Products.Name, Products.Price, Products.ImageURL, ProductDetails.Description, ProductDetails.Size,Products.Created_at FROM Products JOIN ProductDetails ON Products.ProductID = ProductDetails.ProductID;"
+    );
     res.send(result.recordset);
   } catch (err) {
     console.error("Error getting products:", err);
-    res.redirect("/dashboard");
+    res.redirect("/");
   }
 });
 
 app.get("/getProduct/:id", async (req, res) => {
-  // if (!req.isAuthenticated()) {
-  //   return res.status(401).json({ message: "Unauthorized" });
-  // }
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
 
   const { id } = req.params;
   try {
@@ -262,14 +278,6 @@ app.get("/getProduct/:id", async (req, res) => {
   } catch (err) {
     console.error("Error getting product:", err);
     res.status(500).send("Error getting product");
-  }
-});
-
-app.get("/dashboard", (req, res) => {
-  if (req.isAuthenticated()) {
-    res.json({ message: "You are authenticated" });
-  } else {
-    res.status(401).json({ message: "Unauthorized" });
   }
 });
 

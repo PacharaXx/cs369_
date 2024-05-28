@@ -16,6 +16,8 @@ const config = {
   },
 };
 
+console.log(config);
+
 const users = [
   {
     username: "john_doe",
