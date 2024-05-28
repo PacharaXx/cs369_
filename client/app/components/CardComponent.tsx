@@ -16,7 +16,15 @@ const CardComponent: React.FC<CardProps> = ({ id, title, price, imgURL }) => {
       <Card className="custom-card" key={id}>
         <Card.Img variant="top" className="custom-card-img" src={`${imgURL}`} />
         <Card.Body className="custom-card-body">
-          <Card.Title>{title}</Card.Title>
+          <Card.Title
+            style={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {title}
+          </Card.Title>
           <Card.Text>${price}</Card.Text>
         </Card.Body>
       </Card>

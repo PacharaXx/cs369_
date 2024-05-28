@@ -46,6 +46,7 @@ sudo chmod 755 /home/ec2-user
 sudo chmod -R 755 /home/ec2-user
 sudo setsebool -P httpd_read_user_content 1
 
+cd client
 # Navigate to the client directory
 sudo npm install
 sudo npm run build

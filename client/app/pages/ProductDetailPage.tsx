@@ -1,11 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Button, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import axios from "axios";
 
 const ProductsPage = () => {
-  const { id } = useParams();
-  const [data, setData] = useState(null);
+  const { id } = useParams<{ id: string }>(); // Specify the type for useParams
+
+  // Define the type for the data state
+  interface ProductData {
+    product: {
+      Name: string;
+      ImageURL: string;
+      Price: number;
+    };
+    details: {
+      Size: string;
+      Description: string;
+    };
+    materials?: string[];
+    // Add more properties as needed
+  }
+
+  const [data, setData] = useState<ProductData | null>(null); // Initialize with null or default data structure
 
   // Load data on component mount and when id parameter changes
   useEffect(() => {
@@ -58,11 +74,11 @@ const ProductsPage = () => {
         </Container>
         <Container className="d-flex flex-wrap gap-3">
           {/* Display product detail components */}
-          {data && (
+          {data && data.product && (
             <Container className="d-flex flex-column gap-3 justify-content-center align-items-center">
               <h3>{data.product.Name}</h3>
               <img src={data.product.ImageURL} alt={data.product.Name} />
-              <p>Price :{data.product.Price}</p>
+              <p>Price: {data.product.Price}</p>
               <p>{data.details.Size}</p>
               {data.materials &&
                 data.materials.map((material) => (
