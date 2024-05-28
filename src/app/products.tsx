@@ -1,7 +1,8 @@
 import React from "react";
 import axios from "axios";
+import styles from "./styles/products.module.css"; // Ensure this file exists and is properly configured
 
-export default function ProductPage() {
+export default function ProductsPage() {
   const [data, setData] = React.useState(null);
 
   React.useEffect(() => {
@@ -22,9 +23,11 @@ export default function ProductPage() {
       <ul>
         {data &&
           data.map((product) => (
-            <li key={product.ProductID}>
-              {product.Name} - {product.Price}
-            </li>
+            <div className={styles.card} key={product.id}>
+              <img src={product.ImageURL} alt={product.Name} />
+              <h2>{product.Name}</h2>
+              <p>{product.Price}</p>
+            </div>
           ))}
       </ul>
     </div>

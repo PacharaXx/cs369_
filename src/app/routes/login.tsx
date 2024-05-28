@@ -38,46 +38,6 @@ const LoginPage: React.FC = () => {
   return (
     <div className={styles.loginContainer}>
       <h1>Login</h1>
-      <form onSubmit={handleLogin} className={styles.loginForm}>
-        <div className={styles.formGroup}>
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            className={styles.inputField}
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className={styles.inputField}
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <button type="submit" className={styles.submitButton}>
-            Login
-          </button>
-        </div>
-      </form>
-      {status === false && (
-        <SweetAlert2
-          show={!status}
-          title="Error"
-          text={messages.join(", ")}
-          icon="error"
-          onConfirm={() => setStatus(true)}
-        />
-      )}
     </div>
   );
 };

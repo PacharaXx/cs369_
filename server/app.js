@@ -57,7 +57,10 @@ app.get("/users", async (req, res) => {
     return res.status(401).json({ message: "Unauthorized" });
   } else {
     // return UserID
-    res.json({ message: req.user.UserName });
+    res.json({
+      message: req.user.UserName,
+      isAuthenticated: req.isAuthenticated(),
+    });
     // res.json({ message: "You are authenticated" });
   }
 });
@@ -256,15 +259,6 @@ app.get("/getProduct/:id", async (req, res) => {
     res.status(500).send("Error getting product");
   }
 });
-
-app.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/dashboard",
-    failureRedirect: "/login",
-    failureFlash: true,
-  })
-);
 
 app.get("/dashboard", (req, res) => {
   if (req.isAuthenticated()) {
