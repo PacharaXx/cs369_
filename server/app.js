@@ -41,7 +41,7 @@ app.use(
   })
 );
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "../client/", "public")));
 
 // Initialize Passport
 app.use(passport.initialize());
@@ -114,7 +114,7 @@ app.post("/register", async (req, res) => {
 });
 
 // ../public/uploads
-const uploadDir = path.join(__dirname, "..", "public", "uploads");
+const uploadDir = path.join(__dirname, "../client/", "public", "uploads");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
@@ -151,7 +151,7 @@ app.post("/addProduct", async (req, res) => {
     );
 
     // Ensure 'uploads' directory exists
-    const uploadDir = path.join(__dirname, "..", "public", "uploads");
+    const uploadDir = path.join(__dirname, "../client/", "public", "uploads");
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
@@ -160,7 +160,7 @@ app.post("/addProduct", async (req, res) => {
     const imgBuffer = Buffer.from(imgProductBase64S, "base64");
     // Save decoded image to a file
     const imgProductUrl = `/uploads/${Date.now()}_image.jpg`;
-    const imgPath = path.join(__dirname, "..", "public", imgProductUrl);
+    const imgPath = path.join(__dirname, "../client/", "public", imgProductUrl);
     fs.writeFileSync(imgPath, imgBuffer);
 
     // Start a transaction
@@ -282,11 +282,16 @@ app.get("/getProduct/:id", async (req, res) => {
 });
 
 app.get("/logout", (req, res) => {
+  res
+    .status(200)
+    .json({
+      message: "Logout successful",
+      isAuthenticated: req.isAuthenticated(),
+    });
   req.logout((err) => {
     if (err) {
       return next(err);
     }
-    res.redirect("/login");
   });
 });
 

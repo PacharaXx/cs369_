@@ -1,0 +1,18 @@
+{
+  "name": "server",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "passport": "^0.7.0",
+    "connect-flash": "^0.1.1",
+    "passport-local": "^1.0.0",
+    "bcrypt": "^5.1.1",
+    "mssql": "^10.0.2",
+    "dotenv": "^16.4.5"
+  }
+}
