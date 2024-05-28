@@ -113,7 +113,8 @@ app.post("/register", async (req, res) => {
   }
 });
 
-const uploadDir = path.join(__dirname, "public", "uploads");
+// ../public/uploads
+const uploadDir = path.join(__dirname, "..", "public", "uploads");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
@@ -150,7 +151,7 @@ app.post("/addProduct", async (req, res) => {
     );
 
     // Ensure 'uploads' directory exists
-    const uploadDir = path.join(__dirname, "public", "uploads");
+    const uploadDir = path.join(__dirname, "..", "public", "uploads");
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
@@ -159,7 +160,7 @@ app.post("/addProduct", async (req, res) => {
     const imgBuffer = Buffer.from(imgProductBase64S, "base64");
     // Save decoded image to a file
     const imgProductUrl = `/uploads/${Date.now()}_image.jpg`;
-    const imgPath = path.join(__dirname, "public", imgProductUrl);
+    const imgPath = path.join(__dirname, "..", "public", imgProductUrl);
     fs.writeFileSync(imgPath, imgBuffer);
 
     // Start a transaction
@@ -252,7 +253,6 @@ app.get("/getAllProducts", async (req, res) => {
 app.get("/getProduct/:id", async (req, res) => {
   if (!req.isAuthenticated()) {
     return res.status(401).json({ message: "Unauthorized" });
-
   }
 
   const { id } = req.params;

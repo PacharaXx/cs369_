@@ -11,16 +11,10 @@ interface CardProps {
 }
 
 const CardComponent: React.FC<CardProps> = ({ id, title, price, imgURL }) => {
-  const serverUrl = "http://localhost:3001";
-
   return (
     <Link to={`/product/${id}`} className="custom-card-link">
       <Card className="custom-card" key={id}>
-        <Card.Img
-          variant="top"
-          className="custom-card-img"
-          src={`${serverUrl}${imgURL}`} // Ensure this constructs the correct URL
-        />
+        <Card.Img variant="top" className="custom-card-img" src={`${imgURL}`} />
         <Card.Body className="custom-card-body">
           <Card.Title>{title}</Card.Title>
           <Card.Text>${price}</Card.Text>
