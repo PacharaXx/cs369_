@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import SweetAlert2 from "react-sweetalert2";
 import styles from "../styles/login.module.css"; // Ensure this file exists and is properly configured
+// Input bootstrap
+import { Form, Button } from "react-bootstrap";
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -41,7 +43,7 @@ const LoginPage: React.FC = () => {
       <form onSubmit={handleLogin} className={styles.loginForm}>
         <div className={styles.formGroup}>
           <label htmlFor="username">Username:</label>
-          <input
+          <Form.Control
             type="text"
             id="username"
             name="username"
@@ -53,7 +55,7 @@ const LoginPage: React.FC = () => {
         </div>
         <div className={styles.formGroup}>
           <label htmlFor="password">Password:</label>
-          <input
+          <Form.Control
             type="password"
             id="password"
             name="password"
@@ -64,9 +66,9 @@ const LoginPage: React.FC = () => {
           />
         </div>
         <div className={styles.formGroup}>
-          <button type="submit" className={styles.submitButton}>
+          <Button type="submit" variant="primary">
             Login
-          </button>
+          </Button>
         </div>
       </form>
       {status === false && (

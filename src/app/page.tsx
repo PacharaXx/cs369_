@@ -1,9 +1,15 @@
 "use client";
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import LoginPage from "./pages/login";
 import React from "react";
 import axios from "axios";
 import ProductsPage from "./pages/products";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/loading.css"; // Ensure this file exists and is properly configured
 
 export default function Home() {
@@ -53,7 +59,7 @@ export default function Home() {
         />
         <Route
           path="/"
-          element={isLoggedIn ? <ProductsPage /> : <Navigate to="/login" />}
+          element={isLoggedIn ? <ProductsPage /> : <LoginPage />}
         />
       </Routes>
     </Router>

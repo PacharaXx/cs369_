@@ -1,15 +1,17 @@
 import React from "react";
 import { Card } from "react-bootstrap";
+import "../styles/CardComponent.css";
+
 interface CardProps {
-  key: number;
+  id: number; // Change key to id
   title: string;
   price: number;
   imgURL: string;
 }
 
-const CardComponent: React.FC<CardProps> = ({ key, title, price, imgURL }) => {
+const CardComponent: React.FC<CardProps> = ({ id, title, price, imgURL }) => {
   return (
-    <Card className="card" key={key}>
+    <Card className="custom-card">
       <Card.Img variant="top" src={imgURL} />
       <Card.Body>
         <Card.Title>{title}</Card.Title>
