@@ -10,6 +10,10 @@ const nextConfig = {
   env: {
     API_URL: process.env.REACT_APP_API_URL,
   },
+
+  server: {
+    port: 3000,
+  },
 };
 
 export default nextConfig;
