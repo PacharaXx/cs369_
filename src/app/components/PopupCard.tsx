@@ -119,7 +119,7 @@ const PopupCard: React.FC<PopupCardProps> = ({
           <Form.Group className="mb-1">
             <Form.Label>Product Price</Form.Label>
             <Form.Control
-              type="text"
+              type="number"
               placeholder="Enter product price"
               value={productPrice}
               onChange={(e) => setProductPrice(e.target.value)}

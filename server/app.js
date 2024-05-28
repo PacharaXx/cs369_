@@ -239,7 +239,9 @@ app.get("/getAllProducts", async (req, res) => {
     return res.status(401).json({ message: "Unauthorized" });
   }
   try {
-    const result = await new sql.Request().query("SELECT * FROM Products");
+    const result = await new sql.Request().query(
+      "SELECT DISTINCT Products.ProductID, Products.Name, Products.Price, Products.ImageURL, ProductDetails.Description, ProductDetails.Size,Products.Created_at FROM Products JOIN ProductDetails ON Products.ProductID = ProductDetails.ProductID;"
+    );
     res.send(result.recordset);
   } catch (err) {
     console.error("Error getting products:", err);

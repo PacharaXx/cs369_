@@ -25,7 +25,8 @@ CREATE TABLE Products (
     ProductID INT PRIMARY KEY IDENTITY (1,1),
     Name NVARCHAR(255) NOT NULL,
     Price DECIMAL(10, 2) NOT NULL,
-    ImageURL NVARCHAR(255) NOT NULL
+    ImageURL NVARCHAR(255) NOT NULL,
+    Created_at DATETIME DEFAULT GETDATE()
 );
 
 -- ProductDetails Table
