@@ -245,14 +245,15 @@ app.get("/getAllProducts", async (req, res) => {
     res.send(result.recordset);
   } catch (err) {
     console.error("Error getting products:", err);
-    res.redirect("/dashboard");
+    res.redirect("/");
   }
 });
 
 app.get("/getProduct/:id", async (req, res) => {
-  // if (!req.isAuthenticated()) {
-  //   return res.status(401).json({ message: "Unauthorized" });
-  // }
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: "Unauthorized" });
+
+  }
 
   const { id } = req.params;
   try {
@@ -277,14 +278,6 @@ app.get("/getProduct/:id", async (req, res) => {
   } catch (err) {
     console.error("Error getting product:", err);
     res.status(500).send("Error getting product");
-  }
-});
-
-app.get("/dashboard", (req, res) => {
-  if (req.isAuthenticated()) {
-    res.json({ message: "You are authenticated" });
-  } else {
-    res.status(401).json({ message: "Unauthorized" });
   }
 });
 
