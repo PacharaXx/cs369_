@@ -24,10 +24,5 @@ export default function Home() {
       });
   }, []);
 
-  return (
-    <div>
-      {isLoggedIn ? <ProductPage /> : <LoginPage />}
-      {error && <div>{error.message}</div>}
-    </div>
-  );
+  return <div>{isLoggedIn ? <ProductPage /> : <LoginPage />}</div>;
 }
