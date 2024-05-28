@@ -6,6 +6,8 @@ import SweetAlert2 from "react-sweetalert2";
 import styles from "../styles/login.module.css"; // Ensure this file exists and is properly configured
 // Input bootstrap
 import { Form, Button } from "react-bootstrap";
+// environment variables
+import { env } from "process";
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -17,7 +19,7 @@ const LoginPage: React.FC = () => {
     event.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:3001/login",
+        env.API_URL + "/login", // Add the API_URL environment variable
         { username, password },
         { withCredentials: true }
       );
