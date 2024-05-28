@@ -8,7 +8,7 @@ import styles from "./styles/login.module.css"; // Ensure this file exists and i
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [status, setStatus] = useState<string>(""); // Type the state properly
+  const [status, setStatus] = useState(false);
   const [messages, setMessages] = useState<string[]>([]);
 
   const handleLogin = async (event: React.FormEvent) => {
@@ -24,12 +24,12 @@ const LoginPage: React.FC = () => {
           withCredentials: true,
         });
         window.location.href = "/";
-        setStatus("success");
+        setStatus(true);
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         console.error("Error response:", error.response);
-        setStatus("error");
+        setStatus(false);
         setMessages(error.response.data.messages || ["Login failed"]);
       }
     }
@@ -69,13 +69,13 @@ const LoginPage: React.FC = () => {
           </button>
         </div>
       </form>
-      {status === "error" && (
+      {status === false && (
         <SweetAlert2
-          show={true}
+          show={!status}
           title="Error"
           text={messages.join(", ")}
           icon="error"
-          onConfirm={() => setStatus("")} // Reset status on alert confirm
+          onConfirm={() => setStatus(true)}
         />
       )}
     </div>
