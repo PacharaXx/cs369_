@@ -6,25 +6,22 @@ import SweetAlert2 from "react-sweetalert2";
 import styles from "../styles/login.module.css"; // Ensure this file exists and is properly configured
 // Input bootstrap
 import { Form, Button } from "react-bootstrap";
-// environment variables
-import { env } from "process";
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState(true);
   const [messages, setMessages] = useState<string[]>([]);
-
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
       const res = await axios.post(
-        env.API_URL + "/login", // Add the API_URL environment variable
+        process.env.API_URL + ":3001/login",
         { username, password },
         { withCredentials: true }
       );
       if (res.status === 200) {
-        const user = await axios.get("http://localhost:3001/users/", {
+        const user = await axios.get(process.env.API_URL + ":3001/users", {
           withCredentials: true,
         });
         window.location.href = "/";

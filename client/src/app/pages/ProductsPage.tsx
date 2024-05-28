@@ -10,7 +10,9 @@ export default function ProductsPage() {
 
   const reLoadHandler = () => {
     axios
-      .get("http://localhost:3001/getAllProducts", { withCredentials: true })
+      .get(process.env.API_URL + ":3001/getAllProducts", {
+        withCredentials: true,
+      })
       .then((res) => {
         setData(res.data);
       })
@@ -21,7 +23,7 @@ export default function ProductsPage() {
 
   const handleLogout = () => {
     axios
-      .get("http://localhost:3001/logout", { withCredentials: true })
+      .get(process.env.API_URL + ":3001/logout", { withCredentials: true })
       .then(() => {
         window.location.href = "/";
       })
