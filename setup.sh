@@ -32,7 +32,7 @@ sudo npm i
 # sudo node ./configs/setupProductTable.js
 
 # Start the server application using pm2
-sudo pm2 start ./app.js
+sudo pm2 start ./app.js --name server
 
 # Save the current pm2 processes
 sudo pm2 save
