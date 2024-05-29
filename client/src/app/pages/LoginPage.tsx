@@ -6,6 +6,7 @@ import SweetAlert2 from "react-sweetalert2";
 import styles from "../styles/login.module.css";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { Link } from "react-router-dom";
 import {
   MDBContainer,
   MDBRow,
@@ -135,9 +136,9 @@ const LoginPage: React.FC = () => {
                     style={{ color: "#212F3C" }}
                   >
                     Don't have an account?{" "}
-                    <a href="#!" style={{ color: "#097969" }}>
+                    <Link to="/register" style={{ color: "#097969" }}>
                       Register here
-                    </a>
+                    </Link>
                   </p>
                 </form>
                 {status === false && (

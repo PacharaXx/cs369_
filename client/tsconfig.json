@@ -18,7 +18,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"], // Define alias for importing modules from 'src' directory
+      "@/*": ["./src/app/*"], // Define alias for importing modules from 'src' directory
       "@product/*": ["./src/pages/ProductDetailPage/*"] // Define alias for 'ProductDetailPage' components
     }
   },

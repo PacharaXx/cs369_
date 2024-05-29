@@ -5,18 +5,18 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true, // Ignore ESLint during production builds
   },
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: "http://localhost:3001/api/:path*", // Proxy to Backend
-      },
-      {
-        source: '/:path*',
-        destination: '/',
-      },
-    ];
-  },
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: "/api/:path*",
+  //       destination: "http://localhost:3001/api/:path*", // Proxy to Backend
+  //     },
+  //     {
+  //       source: '/:path*',
+  //       destination: '/',
+  //     },
+  //   ];
+  // },
 };
 
 export default nextConfig;
