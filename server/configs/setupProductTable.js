@@ -104,7 +104,7 @@ async function insertData() {
   } catch (error) {
     console.error("Error inserting data:", error);
   } finally {
-    sql.close();
+    
   }
 }
 
