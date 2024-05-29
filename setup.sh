@@ -22,7 +22,7 @@ sudo npm install pm2 -g
 cd /home/ec2-user
 
 # Clone the repository
-git clone -b test/deplot https://github.com/PacharaXx/cs369_.git
+git clone -b develop/origin https://github.com/PacharaXx/cs369_.git
 
 # Navigate to the project directory
 cd cs369_/server
@@ -48,7 +48,7 @@ cd ../client
 sudo npm i
 sudo npm run build
 
-sudo pm2 start --name client npm -- start
+sudo pm2 start npm --name "client" -- start -- -p 3000
 
 # Save the current pm2 processes
 sudo pm2 save
@@ -107,12 +107,9 @@ http {
         server_name _;
 
         location / {
-            proxy_pass http://localhost:3000;
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade \$http_upgrade;
-            proxy_set_header Connection 'upgrade';
-            proxy_set_header Host \$host;
-            proxy_cache_bypass \$http_upgrade;
+            root /usr/share/nginx/html;
+            index index.html index.htm;
+            try_files \$uri \$uri/ /index.html;
         }
 
         location /api/ {
