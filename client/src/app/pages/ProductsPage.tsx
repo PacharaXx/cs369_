@@ -10,7 +10,7 @@ export default function ProductsPage() {
 
   const reLoadHandler = () => {
     axios
-      .get(process.env.API_URL + "/api/getAllProducts", {
+      .get("/api/getAllProducts", {
         withCredentials: true,
       })
       .then((res) => {
@@ -23,7 +23,7 @@ export default function ProductsPage() {
 
   const handleLogout = () => {
     axios
-      .get(process.env.API_URL + "/api/logout", { withCredentials: true })
+      .get("/api/logout", { withCredentials: true })
       .then(() => {
         window.location.href = "/";
       })

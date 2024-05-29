@@ -5,9 +5,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true, // Ignore ESLint during production builds
   },
-  env: {
-    API_URL: process.env.REACT_APP_API_URL,
-  },
 };
 
 export default nextConfig;

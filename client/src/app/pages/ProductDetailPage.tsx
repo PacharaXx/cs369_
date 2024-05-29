@@ -28,7 +28,7 @@ const ProductsPage = () => {
     // Function to fetch product details
     const fetchProductDetails = () => {
       axios
-        .get(`${process.env.API_URL}/api/getProduct/${id}`, {
+        .get(`/api/getProduct/${id}`, {
           withCredentials: true,
         })
         .then((res) => {
@@ -44,7 +44,7 @@ const ProductsPage = () => {
 
   const handleLogout = () => {
     axios
-      .get(process.env.API_URL + "/api/logout", { withCredentials: true })
+      .get("/api/logout", { withCredentials: true })
       .then(() => {
         window.location.href = "/";
       })
