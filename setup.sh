@@ -28,8 +28,8 @@ git clone -b test/deplot https://github.com/PacharaXx/cs369_.git
 cd cs369_/server
 sudo npm i
 
-sudo node ./config/resetProductTable.js
-sudo node ./config/setupProductTable.js
+# sudo node ./configs/resetProductTable.js
+# sudo node ./configs/setupProductTable.js
 
 # Start the server application using pm2
 sudo pm2 start ./app.js
