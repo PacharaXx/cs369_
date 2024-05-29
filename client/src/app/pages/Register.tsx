@@ -1,4 +1,4 @@
-// pages/login.tsx
+// pages/register.tsx
 "use client"; // Add this line at the top
 import React, { useState } from "react";
 import axios from "axios";
@@ -18,38 +18,42 @@ import {
 // Input bootstrap
 import { Form, Button, Card } from "react-bootstrap";
 
-const LoginPage: React.FC = () => {
+const RegisterPage: React.FC = () => {
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [status, setStatus] = useState(true);
   const [messages, setMessages] = useState<string[]>([]);
 
-  const handleLogin = async (event: React.FormEvent) => {
+  const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (password !== confirmPassword) {
+      setStatus(false);
+      setMessages(["Passwords do not match"]);
+      return;
+    }
     try {
       const res = await axios.post(
-        "http://localhost:3001/login",
-        { username, password },
+        "http://localhost:3001/register",
+        { username, email, password },
         { withCredentials: true }
       );
-      if (res.status === 200) {
-        const user = await axios.get("http://localhost:3001/users/", {
-          withCredentials: true,
-        });
-        window.location.href = "/";
+      if (res.status === 201) {
+        window.location.href = "/login";
         setStatus(true);
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         console.error("Error response:", error.response);
         setStatus(false);
-        setMessages(error.response.data.messages || ["Login failed"]);
+        setMessages(error.response.data.messages || ["Registration failed"]);
       }
     }
   };
 
-  const handleBackToRegister = () => {
-    window.location.href = "/register"; // Navigate to register page
+  const handleBackToLogin = () => {
+    window.location.href = "/login"; // Navigate to login page
   };
 
   return (
@@ -57,7 +61,7 @@ const LoginPage: React.FC = () => {
       <nav className="navbar shadow-sm p-3 mb-5 bg-body rounded">
         <div className="container-fluid">
           <span className="navbar-text">
-            Welcome to my online shop!
+          "Experience new ways of online shopping"
           </span>
         </div>
       </nav>
@@ -82,10 +86,11 @@ const LoginPage: React.FC = () => {
           <MDBCard className={styles.bgglass}>
             <MDBCardBody className='p-5'>
               <div className={styles.container4}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
-                  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-                  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
-                </svg>
+
+                  <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" className="bi bi-person-add" viewBox="0 0 16 16">
+  <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+  <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
+</svg>
               </div>
               <br></br>
               <br></br>
@@ -99,28 +104,45 @@ const LoginPage: React.FC = () => {
                 size="sm"
                 placeholder="Username"
               />
-
+              <MDBInput
+                wrapperClass='mb-4'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                id="email"
+                type='email'
+                size="sm"
+                placeholder="E-mail"
+              />
               <MDBInput
                 wrapperClass='mb-4'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                name="password"
                 id="password"
                 type='password'
                 size="sm"
                 placeholder="Password"
                 required
               />
+              <MDBInput
+                wrapperClass='mb-4'
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                id="confirmPassword"
+                type='password'
+                size="sm"
+                placeholder="Confirm Password"
+                required
+              />
               <div className={styles.loginContainer}>
-                <form onSubmit={handleLogin} className={styles.loginForm}>
+                <form onSubmit={handleRegister} className={styles.loginForm}>
                   <div className={styles.container5}>
                     <Button type="submit" variant="success">
-                      Login
+                      Register
                     </Button>
-                    
+                    <Button variant="secondary" onClick={handleBackToLogin} style={{ marginLeft: '10px' }}>
+                      Back to Login
+                    </Button>
                   </div>
-                  <br></br>
-                  <p className="mb-5 pb-lg-2" onClick={handleBackToRegister} style={{color: '#212F3C'}}>Don't have an account? <a href="#!" style={{color: '#097969'}}>Register here</a></p>
                 </form>
                 {status === false && (
                   <SweetAlert2
@@ -141,4 +163,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
