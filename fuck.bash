@@ -21,8 +21,6 @@ sudo npm install pm2 -g
 # Go to the home directory of the current user
 cd /home/ec2-user
 
-# sudo rm -r ./cs369_/
-
 # Clone the repository
 git clone -b test/deplot https://github.com/PacharaXx/cs369_.git
 
@@ -67,7 +65,7 @@ sudo cp -r out/* /usr/share/nginx/html/
 
 # echo to nginx.conf
 # Update the Nginx configuration
-sudo bash -c 'cat > /etc/nginx/nginx.conf' << EOF
+sudo bash -c 'cat > /etc/nginx/nginx.conf' <<EOF
 user nginx;
 worker_processes auto;
 error_log /var/log/nginx/error.log;
@@ -91,7 +89,7 @@ http {
     tcp_nopush on;
     tcp_nodelay on;
     keepalive_timeout 65;
-    types_hash_max_size 2048; # Increased to 2048 for better performance
+    types_hash_max_size 2048;
 
     include /etc/nginx/conf.d/*.conf;
     include /etc/nginx/sites-enabled/*;
@@ -109,6 +107,14 @@ http {
             proxy_cache_bypass \$http_upgrade;
         }
 
+        location /uploads/ {
+            proxy_pass http://localhost:3001;
+            proxy_set_header Host \$host;
+            proxy_set_header X-Real-IP \$remote_addr;
+            proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto \$scheme;
+        }
+
         error_page 404 /404.html;
         location = /404.html {
             internal;
@@ -116,6 +122,7 @@ http {
     }
 }
 EOF
+
 
 # Restart Nginx to reflect the changes
 sudo systemctl restart nginx
