@@ -51,11 +51,11 @@ app.use(passport.session());
 app.use(flash());
 
 // Set up routes
-app.get("/", (req, res) => {
+app.get("/api/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.get("/users", async (req, res) => {
+app.get("/api/users", async (req, res) => {
   if (!req.isAuthenticated()) {
     return res.status(401).json({
       message: "Unauthorized",
@@ -282,12 +282,10 @@ app.get("/api/getProduct/:id", async (req, res) => {
 });
 
 app.get("/api/logout", (req, res) => {
-  res
-    .status(200)
-    .json({
-      message: "Logout successful",
-      isAuthenticated: req.isAuthenticated(),
-    });
+  res.status(200).json({
+    message: "Logout successful",
+    isAuthenticated: req.isAuthenticated(),
+  });
   req.logout((err) => {
     if (err) {
       return next(err);

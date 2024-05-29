@@ -16,12 +16,12 @@ const LoginPage: React.FC = () => {
     event.preventDefault();
     try {
       const res = await axios.post(
-        process.env.API_URL + "/api/login",
+        "/api/login",
         { username, password },
         { withCredentials: true }
       );
       if (res.status === 200) {
-        const user = await axios.get(process.env.API_URL + "/api/users", {
+        const user = await axios.get("/api/users", {
           withCredentials: true,
         });
         window.location.href = "/";
