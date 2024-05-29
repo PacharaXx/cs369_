@@ -42,45 +42,39 @@ const PopupCard: React.FC<PopupCardProps> = ({
   };
 
   const handleSubmit = async () => {
-    if (
-      !productName ||
-      !productPrice ||
-      !productDescription ||
-      !selectedFile ||
-      materials.some((mat) => mat === "")
-    ) {
-      alert("All fields and image file are required");
-      return;
-    }
-
     try {
-      const imgProductBase64 = await imageAttachmentToBase64(selectedFile);
+      if (
+        !productName ||
+        !productPrice ||
+        !productDescription ||
+        !selectedFile ||
+        materials.some((mat) => mat === "")
+      ) {
+        alert("All fields and image file are required");
+        return;
+      }
 
-      // Send the form data to the server here
-      const formData = {
-        nameProduct: productName,
-        priceProduct: parseFloat(productPrice),
-        description: productDescription,
-        size: "Standard", // Adjust according to your requirements
-        materials: materials.filter((mat) => mat !== ""), // Remove empty materials
-        imgProductBase64: imgProductBase64,
-      };
+      const formData = new FormData();
+      formData.append("nameProduct", productName);
+      formData.append("priceProduct", parseFloat(productPrice).toString());
+      formData.append("description", productDescription);
+      formData.append("size", "Standard");
+      materials
+        .filter((mat) => mat !== "")
+        .forEach((mat, index) => {
+          formData.append(`materials[${index}]`, mat);
+        });
+      formData.append("imgProduct", selectedFile);
 
-      console.log("Form data:", formData);
-
-      // Example fetch request to send formData to the server
       const response = await fetch("http://localhost:3001/addProduct", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+        body: formData,
       });
 
       if (response.ok) {
         alert("Product added successfully!");
         onClose();
-        onReloadItems(); // Reload items after adding a new product
+        onReloadItems();
       } else {
         throw new Error("Failed to add product");
       }
@@ -88,15 +82,6 @@ const PopupCard: React.FC<PopupCardProps> = ({
       console.error("Error adding product:", error);
       alert("Error adding product");
     }
-  };
-
-  const imageAttachmentToBase64 = (file: File) => {
-    return new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
   };
 
   return (

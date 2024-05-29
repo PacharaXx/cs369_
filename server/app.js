@@ -8,6 +8,8 @@ const sql = require("mssql");
 const fs = require("fs");
 const cors = require("cors");
 const path = require("path");
+const multer = require("multer");
+const upload = multer({ dest: "../client/public/uploads" });
 
 // Require the Passport configuration
 require("./passport-config")(passport);
@@ -27,6 +29,7 @@ app.use(
     credentials: true, // Allow cookies to be sent with requests
   })
 );
+
 // Middleware for parsing JSON and urlencoded request bodies
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -120,15 +123,10 @@ if (!fs.existsSync(uploadDir)) {
 }
 
 // POST route for adding a product with Base64 image input
-app.post("/api/addProduct", async (req, res) => {
-  const {
-    nameProduct,
-    priceProduct,
-    description,
-    size,
-    materials,
-    imgProductBase64,
-  } = req.body;
+app.post("/addProduct", upload.single("imgProduct"), async (req, res) => {
+  const { nameProduct, priceProduct, description, size, materials } = req.body;
+
+  const { filename: imgFilename } = req.file; // Multer stores uploaded file details in req.file
 
   try {
     // Validate required fields
@@ -138,100 +136,85 @@ app.post("/api/addProduct", async (req, res) => {
       !description ||
       !size ||
       !materials ||
-      !imgProductBase64
+      !imgFilename
     ) {
-      return res
-        .status(400)
-        .send("All fields and image file (Base64) are required");
+      return res.status(400).send("All fields and image file are required");
     }
 
-    const imgProductBase64S = imgProductBase64.replace(
-      /^data:image\/\w+;base64,/,
-      ""
-    );
-
-    // Ensure 'uploads' directory exists
-    const uploadDir = path.join(__dirname, "../client/", "public", "uploads");
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-
-    // Decode Base64 image data
-    const imgBuffer = Buffer.from(imgProductBase64S, "base64");
-    // Save decoded image to a file
-    const imgProductUrl = `/uploads/${Date.now()}_image.jpg`;
-    const imgPath = path.join(__dirname, "../client/", "public", imgProductUrl);
-    fs.writeFileSync(imgPath, imgBuffer);
+    const imgProductUrl = `/uploads/${imgFilename}`;
 
     // Start a transaction
     const transaction = new sql.Transaction();
     await transaction.begin();
 
-    // Insert into Products table
-    const productRequest = new sql.Request(transaction);
-    const productResult = await productRequest
-      .input("Name", sql.NVarChar, nameProduct)
-      .input("ImageURL", sql.NVarChar, imgProductUrl)
-      .input("Price", sql.Decimal(10, 2), priceProduct)
-      .query(
-        "INSERT INTO Products (Name, Price, ImageURL) OUTPUT INSERTED.ProductID VALUES (@Name, @Price, @ImageURL)"
-      );
+    try {
+      // Insert into Products table
+      const productResult = await transaction
+        .request()
+        .input("Name", sql.NVarChar, nameProduct)
+        .input("ImageURL", sql.NVarChar, imgProductUrl)
+        .input("Price", sql.Decimal(10, 2), priceProduct)
+        .query(
+          "INSERT INTO Products (Name, Price, ImageURL) OUTPUT INSERTED.ProductID VALUES (@Name, @Price, @ImageURL)"
+        );
 
-    const productId = productResult.recordset[0].ProductID;
+      const productId = productResult.recordset[0].ProductID;
 
-    // Insert into ProductDetails table
-    const detailRequest = new sql.Request(transaction);
-    await detailRequest
-      .input("ProductID", sql.Int, productId)
-      .input("Description", sql.NVarChar, description)
-      .input("Size", sql.NVarChar, size)
-      .query(
-        "INSERT INTO ProductDetails (ProductID, Description, Size) VALUES (@ProductID, @Description, @Size)"
-      );
+      // Insert into ProductDetails table
+      await transaction
+        .request()
+        .input("ProductID", sql.Int, productId)
+        .input("Description", sql.NVarChar, description)
+        .input("Size", sql.NVarChar, size)
+        .query(
+          "INSERT INTO ProductDetails (ProductID, Description, Size) VALUES (@ProductID, @Description, @Size)"
+        );
 
-    // Insert materials and product-material relationships
-    for (const material of materials) {
-      // Check if the material already exists
-      const materialCheckRequest = new sql.Request(transaction);
-      const materialResult = await materialCheckRequest
-        .input("Material", sql.NVarChar, material)
-        .query("SELECT MaterialID FROM Materials WHERE Material = @Material");
-
-      let materialId;
-      if (materialResult.recordset.length > 0) {
-        materialId = materialResult.recordset[0].MaterialID;
-      } else {
-        // Insert new material
-        const materialInsertRequest = new sql.Request(transaction);
-        const materialInsertResult = await materialInsertRequest
+      // Insert materials and product-material relationships
+      for (const material of materials) {
+        // Check if the material already exists
+        const materialResult = await transaction
+          .request()
           .input("Material", sql.NVarChar, material)
+          .query("SELECT MaterialID FROM Materials WHERE Material = @Material");
+
+        let materialId;
+        if (materialResult.recordset.length > 0) {
+          materialId = materialResult.recordset[0].MaterialID;
+        } else {
+          // Insert new material
+          const materialInsertResult = await transaction
+            .request()
+            .input("Material", sql.NVarChar, material)
+            .query(
+              "INSERT INTO Materials (Material) OUTPUT INSERTED.MaterialID VALUES (@Material)"
+            );
+          materialId = materialInsertResult.recordset[0].MaterialID;
+        }
+
+        // Insert into ProductMaterials table
+        await transaction
+          .request()
+          .input("ProductID", sql.Int, productId)
+          .input("MaterialID", sql.Int, materialId)
           .query(
-            "INSERT INTO Materials (Material) OUTPUT INSERTED.MaterialID VALUES (@Material)"
+            "INSERT INTO ProductMaterials (ProductID, MaterialID) VALUES (@ProductID, @MaterialID)"
           );
-        materialId = materialInsertResult.recordset[0].MaterialID;
       }
 
-      // Insert into ProductMaterials table
-      const productMaterialRequest = new sql.Request(transaction);
-      await productMaterialRequest
-        .input("ProductID", sql.Int, productId)
-        .input("MaterialID", sql.Int, materialId)
-        .query(
-          "INSERT INTO ProductMaterials (ProductID, MaterialID) VALUES (@ProductID, @MaterialID)"
-        );
+      // Commit the transaction
+      await transaction.commit();
+
+      res.status(201).send("Product added successfully!");
+    } catch (err) {
+      // Rollback the transaction in case of error
+      console.error("Error adding product:", err);
+      await transaction.rollback();
+      res.status(500).send("Error adding product");
     }
-
-    // Commit the transaction
-    await transaction.commit();
-
-    res.status(201).send("Product added successfully!");
   } catch (err) {
-    console.error("Error adding product:", err);
-
-    // Rollback the transaction in case of error
-    if (transaction) await transaction.rollback();
-
-    res.status(500).send("Error adding product");
+    console.error("Error handling request:", err);
+    res.status(500).send("Error handling request");
   }
 });
 

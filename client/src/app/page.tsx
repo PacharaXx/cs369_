@@ -51,24 +51,17 @@ export default function Home() {
   return (
     <Router>
       <Routes>
-        <Route
-          path="/login"
-          element={isLoggedIn ? <Navigate to="/" /> : <LoginPage />}
-        />
-        <Route
-          path="/products"
-          element={isLoggedIn ? <ProductsPage /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/product/:id"
-          element={
-            isLoggedIn ? <ProductDetailPage /> : <Navigate to="/login" />
-          }
-        />
+        <Route path="/product/">
+          <Route
+            path=":id"
+            element={isLoggedIn ? <ProductDetailPage /> : <LoginPage />}
+          />
+        </Route>
         <Route
           path="/"
-          element={isLoggedIn ? <ProductsPage /> : <Navigate to="/login" />}
+          element={isLoggedIn ? <ProductsPage /> : <LoginPage />}
         />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
   );
