@@ -28,6 +28,8 @@ git clone -b develop/origin https://github.com/PacharaXx/cs369_.git
 cd cs369_/server
 sudo npm i
 
+sudo pm2 delete all
+
 # Start the server application using pm2
 sudo pm2 start ./app.js
 
