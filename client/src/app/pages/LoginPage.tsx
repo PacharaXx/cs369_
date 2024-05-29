@@ -4,10 +4,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import SweetAlert2 from "react-sweetalert2";
 import styles from "../styles/login.module.css";
-import { MDBCol } from 'mdb-react-ui-kit';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Nav from 'react-bootstrap/Nav';
 import {
   MDBContainer,
   MDBRow,
@@ -16,7 +14,7 @@ import {
   MDBInput,
 } from 'mdb-react-ui-kit';
 // Input bootstrap
-import { Form, Button, Card } from "react-bootstrap";
+import { Button} from "react-bootstrap";
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
