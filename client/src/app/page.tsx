@@ -12,6 +12,7 @@ import ProductsPage from "./pages/ProductsPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/loading.css"; // Ensure this file exists and is properly configured
+import RegisterPage from "./pages/Register";
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -61,6 +62,7 @@ export default function Home() {
           path="/"
           element={isLoggedIn ? <ProductsPage /> : <LoginPage />}
         />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>

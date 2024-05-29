@@ -101,6 +101,23 @@ app.get("/api/register", (req, res) => {
 app.post("/api/register", async (req, res) => {
   const { username, email, password } = req.body;
   try {
+    // Check if username or email already exists
+    const checkUserQuery = `
+      SELECT COUNT(*) AS count
+      FROM Users
+      WHERE UserName = @UserName OR UserEmail = @UserEmail
+    `;
+    const result = await new sql.Request()
+      .input("UserName", sql.NVarChar, username)
+      .input("UserEmail", sql.NVarChar, email)
+      .query(checkUserQuery);
+
+    if (result.recordset[0].count > 0) {
+      // Username or email already exists
+      return res.status(400).send("Username or email already exists");
+    }
+
+    // If username and email are unique, proceed with registration
     const hashedPassword = await bcrypt.hash(password, 10);
     await new sql.Request()
       .input("UserName", sql.NVarChar, username)
@@ -109,10 +126,11 @@ app.post("/api/register", async (req, res) => {
       .query(
         "INSERT INTO Users (UserName, UserEmail, PasswordHash) VALUES (@UserName, @UserEmail, @PasswordHash)"
       );
+
     res.send("User registered successfully!");
   } catch (err) {
     console.error("Error registering user:", err);
-    res.redirect("/register");
+    res.status(500).send("Error registering user");
   }
 });
 
