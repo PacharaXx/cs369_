@@ -47,10 +47,6 @@ const LoginPage: React.FC = () => {
     }
   };
 
-  const handleBackToRegister = () => {
-    window.location.href = "/register"; // Navigate to register page
-  };
-
   return (
     <MDBContainer fluid className={styles.backgroundRadialGradient}>
       <nav className="navbar shadow-sm p-3 mb-5 bg-body rounded">
@@ -130,11 +126,7 @@ const LoginPage: React.FC = () => {
                     </Button>
                   </div>
                   <br></br>
-                  <p
-                    className="mb-5 pb-lg-2"
-                    onClick={handleBackToRegister}
-                    style={{ color: "#212F3C" }}
-                  >
+                  <p className="mb-5 pb-lg-2" style={{ color: "#212F3C" }}>
                     Don't have an account?{" "}
                     <Link to="/register" style={{ color: "#097969" }}>
                       Register here

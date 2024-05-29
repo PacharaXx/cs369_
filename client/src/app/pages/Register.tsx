@@ -14,6 +14,7 @@ import {
   MDBInput,
 } from "mdb-react-ui-kit";
 import { Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const RegisterPage: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -60,10 +61,6 @@ const RegisterPage: React.FC = () => {
         setMessages(["Unexpected Error"]); // Handle unexpected errors
       }
     }
-  };
-
-  const handleBackToLogin = () => {
-    window.location.href = "/login"; // Navigate to login page
   };
 
   return (
@@ -151,13 +148,14 @@ const RegisterPage: React.FC = () => {
                     <Button type="submit" variant="success">
                       Register
                     </Button>
-                    <Button
-                      variant="secondary"
-                      onClick={handleBackToLogin}
-                      style={{ marginLeft: "10px" }}
-                    >
-                      Back to Login
-                    </Button>
+                    <Link to="/login" style={{ color: "#097969" }}>
+                      <Button
+                        variant="secondary"
+                        style={{ marginLeft: "10px" }}
+                      >
+                        Back to Login
+                      </Button>
+                    </Link>
                   </div>
                 </form>
                 {/* Display error alert */}
