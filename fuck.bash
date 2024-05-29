@@ -19,20 +19,41 @@ sudo npm install pm2 -g
 # Go to the home directory of the current user
 cd /home/ec2-user
 
+sudo rm -r ./cs369_/
+
 # Clone the repository
-git clone -b main https://github.com/PacharaXx/cs369_.git
+git clone -b develop/origin https://github.com/PacharaXx/cs369_.git
 
 # Navigate to the project directory
-cd cs369_
+cd cs369_/server
+sudo npm i
 
 # Start the server application using pm2
-sudo pm2 start ./server/app.js
+sudo pm2 start ./app.js
 
 # Save the current pm2 processes
 sudo pm2 save
 
 # Ensure pm2 starts on boot
 sudo pm2 startup
+
+# 
+sudo pm2 list
+
+cd ../client
+
+sudo npm i
+sudo npm run build
+
+sudo pm2 start npm --name "nextjs-app" -- start -- -p 3000
+
+# Save the current pm2 processes
+sudo pm2 save
+
+# Ensure pm2 starts on boot
+sudo pm2 startup
+
+sudo pm2 list
 
 # Install Nginx
 sudo yum install -y nginx || sudo apt-get install -y nginx
@@ -45,11 +66,6 @@ sudo systemctl enable nginx
 sudo chmod 755 /home/ec2-user
 sudo chmod -R 755 /home/ec2-user
 sudo setsebool -P httpd_read_user_content 1
-
-cd client
-# Navigate to the client directory
-sudo npm install
-sudo npm run build
 
 # Copy the build files to the Nginx HTML directory
 sudo cp -r out/* /usr/share/nginx/html/
