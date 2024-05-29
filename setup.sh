@@ -48,6 +48,14 @@ cd ../client
 sudo npm i
 sudo npm run build
 
+sudo pm2 start --name client npm -- start
+
+# Save the current pm2 processes
+sudo pm2 save
+
+# Ensure pm2 starts on boot
+sudo pm2 startup
+
 # Install Nginx
 sudo yum install -y nginx || sudo apt-get install -y nginx
 
@@ -97,6 +105,15 @@ http {
     server {
         listen 80;
         server_name _;
+
+        location / {
+            proxy_pass http://localhost:3000;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade \$http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host \$host;
+            proxy_cache_bypass \$http_upgrade;
+        }
 
         location /api/ {
             proxy_pass http://localhost:3001;
