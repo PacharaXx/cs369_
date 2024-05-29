@@ -26,12 +26,12 @@ const LoginPage: React.FC = () => {
     event.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:3001/login",
+        "/api/login",
         { username, password },
         { withCredentials: true }
       );
       if (res.status === 200) {
-        const user = await axios.get("http://localhost:3001/users/", {
+        const user = await axios.get("/api/users/", {
           withCredentials: true,
         });
         window.location.href = "/";
@@ -47,7 +47,7 @@ const LoginPage: React.FC = () => {
   };
 
   const handleBackToRegister = () => {
-    window.location.href = "/register"; // Navigate to register page
+    window.location.href = "/api/register"; // Navigate to register page
   };
 
   return (
