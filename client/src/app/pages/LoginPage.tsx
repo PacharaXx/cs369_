@@ -65,8 +65,6 @@ const LoginPage: React.FC = () => {
           <br></br>
           <br></br>
           <br></br>
-          <br></br>
-          <br></br>
         </Col>
       </Row>
       <MDBRow className="justify-content-xl-center">

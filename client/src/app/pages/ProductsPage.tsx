@@ -37,6 +37,7 @@ export default function ProductsPage() {
   }, []);
 
   return (
+    
     <Container className="d-flex flex-wrap gap-3 mt-3">
       <Container className="d-flex flex-column gap-3 justify-content-center align-items-center">
         <Container className="d-flex flex-wrap gap-3 justify-content-between border-bottom border-2 p-3 w-100">
