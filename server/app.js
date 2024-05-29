@@ -72,7 +72,7 @@ app.get("/users", async (req, res) => {
 });
 
 // Login route
-app.post("/login", (req, res, next) => {
+app.post("/api/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       return next(err);
@@ -91,11 +91,11 @@ app.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
-app.get("/register", (req, res) => {
+app.get("/api/register", (req, res) => {
   res.send("Register");
 });
 
-app.post("/register", async (req, res) => {
+app.post("/api/register", async (req, res) => {
   const { username, email, password } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -120,7 +120,7 @@ if (!fs.existsSync(uploadDir)) {
 }
 
 // POST route for adding a product with Base64 image input
-app.post("/addProduct", async (req, res) => {
+app.post("/api/addProduct", async (req, res) => {
   const {
     nameProduct,
     priceProduct,
@@ -235,7 +235,7 @@ app.post("/addProduct", async (req, res) => {
   }
 });
 
-app.get("/getAllProducts", async (req, res) => {
+app.get("/api/getAllProducts", async (req, res) => {
   if (!req.isAuthenticated()) {
     return res.status(401).json({ message: "Unauthorized" });
   }
@@ -250,7 +250,7 @@ app.get("/getAllProducts", async (req, res) => {
   }
 });
 
-app.get("/getProduct/:id", async (req, res) => {
+app.get("/api/getProduct/:id", async (req, res) => {
   if (!req.isAuthenticated()) {
     return res.status(401).json({ message: "Unauthorized" });
   }
@@ -281,7 +281,7 @@ app.get("/getProduct/:id", async (req, res) => {
   }
 });
 
-app.get("/logout", (req, res) => {
+app.get("/api/logout", (req, res) => {
   res
     .status(200)
     .json({

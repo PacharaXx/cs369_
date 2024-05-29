@@ -20,7 +20,7 @@ export default function Home() {
 
   const checkAuthStatus = async () => {
     try {
-      const response = await axios.get(process.env.API_URL + ":3001/users/", {
+      const response = await axios.get(process.env.API_URL + "/api/users/", {
         withCredentials: true,
       });
       setIsLoggedIn(true);
