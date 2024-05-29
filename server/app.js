@@ -8,6 +8,8 @@ const sql = require("mssql");
 const fs = require("fs");
 const cors = require("cors");
 const path = require("path");
+const multer = require("multer");
+const upload = multer({ dest: "../client/public/uploads" });
 
 // Require the Passport configuration
 require("./passport-config")(passport);
@@ -27,6 +29,7 @@ app.use(
     credentials: true, // Allow cookies to be sent with requests
   })
 );
+
 // Middleware for parsing JSON and urlencoded request bodies
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -41,7 +44,7 @@ app.use(
   })
 );
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "../client/", "public")));
 
 // Initialize Passport
 app.use(passport.initialize());
@@ -51,11 +54,11 @@ app.use(passport.session());
 app.use(flash());
 
 // Set up routes
-app.get("/", (req, res) => {
+app.get("/api/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.get("/users", async (req, res) => {
+app.get("/api/users", async (req, res) => {
   if (!req.isAuthenticated()) {
     return res.status(401).json({
       message: "Unauthorized",
@@ -72,7 +75,7 @@ app.get("/users", async (req, res) => {
 });
 
 // Login route
-app.post("/login", (req, res, next) => {
+app.post("/api/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       return next(err);
@@ -91,13 +94,30 @@ app.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
-app.get("/register", (req, res) => {
+app.get("/api/register", (req, res) => {
   res.send("Register");
 });
 
-app.post("/register", async (req, res) => {
+app.post("/api/register", async (req, res) => {
   const { username, email, password } = req.body;
   try {
+    // Check if username or email already exists
+    const checkUserQuery = `
+      SELECT COUNT(*) AS count
+      FROM Users
+      WHERE UserName = @UserName OR UserEmail = @UserEmail
+    `;
+    const result = await new sql.Request()
+      .input("UserName", sql.NVarChar, username)
+      .input("UserEmail", sql.NVarChar, email)
+      .query(checkUserQuery);
+
+    if (result.recordset[0].count > 0) {
+      // Username or email already exists
+      return res.status(400).send("Username or email already exists");
+    }
+
+    // If username and email are unique, proceed with registration
     const hashedPassword = await bcrypt.hash(password, 10);
     await new sql.Request()
       .input("UserName", sql.NVarChar, username)
@@ -106,29 +126,25 @@ app.post("/register", async (req, res) => {
       .query(
         "INSERT INTO Users (UserName, UserEmail, PasswordHash) VALUES (@UserName, @UserEmail, @PasswordHash)"
       );
+
     res.send("User registered successfully!");
   } catch (err) {
     console.error("Error registering user:", err);
-    res.redirect("/register");
+    res.status(500).send("Error registering user");
   }
 });
 
 // ../public/uploads
-const uploadDir = path.join(__dirname, "..", "public", "uploads");
+const uploadDir = path.join(__dirname, "../client/", "public", "uploads");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
 // POST route for adding a product with Base64 image input
-app.post("/addProduct", async (req, res) => {
-  const {
-    nameProduct,
-    priceProduct,
-    description,
-    size,
-    materials,
-    imgProductBase64,
-  } = req.body;
+app.post("/addProduct", upload.single("imgProduct"), async (req, res) => {
+  const { nameProduct, priceProduct, description, size, materials } = req.body;
+
+  const { filename: imgFilename } = req.file; // Multer stores uploaded file details in req.file
 
   try {
     // Validate required fields
@@ -138,104 +154,89 @@ app.post("/addProduct", async (req, res) => {
       !description ||
       !size ||
       !materials ||
-      !imgProductBase64
+      !imgFilename
     ) {
-      return res
-        .status(400)
-        .send("All fields and image file (Base64) are required");
+      return res.status(400).send("All fields and image file are required");
     }
 
-    const imgProductBase64S = imgProductBase64.replace(
-      /^data:image\/\w+;base64,/,
-      ""
-    );
-
-    // Ensure 'uploads' directory exists
-    const uploadDir = path.join(__dirname, "..", "public", "uploads");
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-
-    // Decode Base64 image data
-    const imgBuffer = Buffer.from(imgProductBase64S, "base64");
-    // Save decoded image to a file
-    const imgProductUrl = `/uploads/${Date.now()}_image.jpg`;
-    const imgPath = path.join(__dirname, "..", "public", imgProductUrl);
-    fs.writeFileSync(imgPath, imgBuffer);
+    const imgProductUrl = `/uploads/${imgFilename}`;
 
     // Start a transaction
     const transaction = new sql.Transaction();
     await transaction.begin();
 
-    // Insert into Products table
-    const productRequest = new sql.Request(transaction);
-    const productResult = await productRequest
-      .input("Name", sql.NVarChar, nameProduct)
-      .input("ImageURL", sql.NVarChar, imgProductUrl)
-      .input("Price", sql.Decimal(10, 2), priceProduct)
-      .query(
-        "INSERT INTO Products (Name, Price, ImageURL) OUTPUT INSERTED.ProductID VALUES (@Name, @Price, @ImageURL)"
-      );
+    try {
+      // Insert into Products table
+      const productResult = await transaction
+        .request()
+        .input("Name", sql.NVarChar, nameProduct)
+        .input("ImageURL", sql.NVarChar, imgProductUrl)
+        .input("Price", sql.Decimal(10, 2), priceProduct)
+        .query(
+          "INSERT INTO Products (Name, Price, ImageURL) OUTPUT INSERTED.ProductID VALUES (@Name, @Price, @ImageURL)"
+        );
 
-    const productId = productResult.recordset[0].ProductID;
+      const productId = productResult.recordset[0].ProductID;
 
-    // Insert into ProductDetails table
-    const detailRequest = new sql.Request(transaction);
-    await detailRequest
-      .input("ProductID", sql.Int, productId)
-      .input("Description", sql.NVarChar, description)
-      .input("Size", sql.NVarChar, size)
-      .query(
-        "INSERT INTO ProductDetails (ProductID, Description, Size) VALUES (@ProductID, @Description, @Size)"
-      );
+      // Insert into ProductDetails table
+      await transaction
+        .request()
+        .input("ProductID", sql.Int, productId)
+        .input("Description", sql.NVarChar, description)
+        .input("Size", sql.NVarChar, size)
+        .query(
+          "INSERT INTO ProductDetails (ProductID, Description, Size) VALUES (@ProductID, @Description, @Size)"
+        );
 
-    // Insert materials and product-material relationships
-    for (const material of materials) {
-      // Check if the material already exists
-      const materialCheckRequest = new sql.Request(transaction);
-      const materialResult = await materialCheckRequest
-        .input("Material", sql.NVarChar, material)
-        .query("SELECT MaterialID FROM Materials WHERE Material = @Material");
-
-      let materialId;
-      if (materialResult.recordset.length > 0) {
-        materialId = materialResult.recordset[0].MaterialID;
-      } else {
-        // Insert new material
-        const materialInsertRequest = new sql.Request(transaction);
-        const materialInsertResult = await materialInsertRequest
+      // Insert materials and product-material relationships
+      for (const material of materials) {
+        // Check if the material already exists
+        const materialResult = await transaction
+          .request()
           .input("Material", sql.NVarChar, material)
+          .query("SELECT MaterialID FROM Materials WHERE Material = @Material");
+
+        let materialId;
+        if (materialResult.recordset.length > 0) {
+          materialId = materialResult.recordset[0].MaterialID;
+        } else {
+          // Insert new material
+          const materialInsertResult = await transaction
+            .request()
+            .input("Material", sql.NVarChar, material)
+            .query(
+              "INSERT INTO Materials (Material) OUTPUT INSERTED.MaterialID VALUES (@Material)"
+            );
+          materialId = materialInsertResult.recordset[0].MaterialID;
+        }
+
+        // Insert into ProductMaterials table
+        await transaction
+          .request()
+          .input("ProductID", sql.Int, productId)
+          .input("MaterialID", sql.Int, materialId)
           .query(
-            "INSERT INTO Materials (Material) OUTPUT INSERTED.MaterialID VALUES (@Material)"
+            "INSERT INTO ProductMaterials (ProductID, MaterialID) VALUES (@ProductID, @MaterialID)"
           );
-        materialId = materialInsertResult.recordset[0].MaterialID;
       }
 
-      // Insert into ProductMaterials table
-      const productMaterialRequest = new sql.Request(transaction);
-      await productMaterialRequest
-        .input("ProductID", sql.Int, productId)
-        .input("MaterialID", sql.Int, materialId)
-        .query(
-          "INSERT INTO ProductMaterials (ProductID, MaterialID) VALUES (@ProductID, @MaterialID)"
-        );
+      // Commit the transaction
+      await transaction.commit();
+
+      res.status(201).send("Product added successfully!");
+    } catch (err) {
+      // Rollback the transaction in case of error
+      console.error("Error adding product:", err);
+      await transaction.rollback();
+      res.status(500).send("Error adding product");
     }
-
-    // Commit the transaction
-    await transaction.commit();
-
-    res.status(201).send("Product added successfully!");
   } catch (err) {
-    console.error("Error adding product:", err);
-
-    // Rollback the transaction in case of error
-    if (transaction) await transaction.rollback();
-
-    res.status(500).send("Error adding product");
+    console.error("Error handling request:", err);
+    res.status(500).send("Error handling request");
   }
 });
 
-app.get("/getAllProducts", async (req, res) => {
+app.get("/api/getAllProducts", async (req, res) => {
   if (!req.isAuthenticated()) {
     return res.status(401).json({ message: "Unauthorized" });
   }
@@ -250,7 +251,7 @@ app.get("/getAllProducts", async (req, res) => {
   }
 });
 
-app.get("/getProduct/:id", async (req, res) => {
+app.get("/api/getProduct/:id", async (req, res) => {
   if (!req.isAuthenticated()) {
     return res.status(401).json({ message: "Unauthorized" });
   }
@@ -281,12 +282,15 @@ app.get("/getProduct/:id", async (req, res) => {
   }
 });
 
-app.get("/logout", (req, res) => {
+app.get("/api/logout", (req, res) => {
+  res.status(200).json({
+    message: "Logout successful",
+    isAuthenticated: req.isAuthenticated(),
+  });
   req.logout((err) => {
     if (err) {
       return next(err);
     }
-    res.redirect("/login");
   });
 });
 
