@@ -16,7 +16,6 @@ Assignment in cs369
     
 #### SETUP
 
-    
-      cd ./server/
+
 	  node ./configs/setupProductTable.js
     
