@@ -66,7 +66,7 @@ const PopupCard: React.FC<PopupCardProps> = ({
         });
       formData.append("imgProduct", selectedFile);
 
-      const response = await fetch("http://localhost:3001/addProduct", {
+      const response = await fetch("/api/addProduct", {
         method: "POST",
         body: formData,
       });

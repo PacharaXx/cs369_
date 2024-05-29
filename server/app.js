@@ -141,7 +141,7 @@ if (!fs.existsSync(uploadDir)) {
 }
 
 // POST route for adding a product with Base64 image input
-app.post("/addProduct", upload.single("imgProduct"), async (req, res) => {
+app.post("/api/addProduct", upload.single("imgProduct"), async (req, res) => {
   const { nameProduct, priceProduct, description, size, materials } = req.body;
 
   const { filename: imgFilename } = req.file; // Multer stores uploaded file details in req.file
