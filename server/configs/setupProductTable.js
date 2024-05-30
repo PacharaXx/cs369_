@@ -49,7 +49,7 @@ const data = [
   {
     Name: "GUE88 UNIVERSITY OFF WHITE TEE",
     Price: 1133.04,
-    ImageURL: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    ImageURL: "https://shop.88rising.com/cdn/shop/files/OFF-WHITE-TEE-F4.png?v=1693333119&width=1200",
     Description: "GUE88 University. Official 88 x Guess collaboration featured at Head in the Clouds.",
     Size: "M",
     Materials: ["Cotton"],
