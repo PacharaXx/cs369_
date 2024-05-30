@@ -25,7 +25,7 @@ const CardComponent: React.FC<CardProps> = ({ id, title, price, imgURL }) => {
           >
             {title}
           </Card.Title>
-          <Card.Text>${price}</Card.Text>
+          <Card.Text>	฿{price}</Card.Text>
         </Card.Body>
       </Card>
     </Link>
