@@ -18,4 +18,8 @@ Assignment in cs369
 
 
 	  node ./configs/setupProductTable.js
-    
+
+# DEPLOY VIDEO
+[![YouTube Video](https://img.youtube.com/vi/QRq5VhbEvvU/0.jpg)](https://www.youtube.com/watch?v=QRq5VhbEvvU) 
+# DEMO VIDEO
+[![YouTube Video](https://img.youtube.com/vi/eSf_dKkUaS8/0.jpg)](https://www.youtube.com/watch?v=eSf_dKkUaS8)
