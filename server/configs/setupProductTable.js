@@ -19,9 +19,52 @@ const data = [
     ImageURL: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     Description: "A black shirt will be and probably will be a style that can be worn for many occasions and is comfortable to wear for work or leisure activities.",
     Size: "L",
-    Materials: ["cotton"],
+    Materials: ["Cotton"],
   },
-  
+  {
+    Name: "Roukma",
+    Price: 500.0,
+    ImageURL: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?q=80&w=1976&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    Description: "Long sleeve denim shirt with heart pattern, suitable for casual day wear.",
+    Size: "XL",
+    Materials: ["Denim"],
+  },
+  {
+    Name: "KIIKII",
+    Price: 250.0,
+    ImageURL: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    Description: "Little cat pattern shirt Direct delivery from Japan.",
+    Size: "M",
+    Materials: ["Cotton"],
+  },
+  {
+  Name: "GUE88 UNIVERSITY GREEN LETTERMAN JACKET",
+    Price: 6411.97,
+    ImageURL: "https://shop.88rising.com/cdn/shop/files/GREEN-VARSITY-JACKET-F_a01ed610-ef80-4d52-97f0-b7cf36f856df.png?v=1693335272&width=1920",
+    Description: "GUE88 University.Official",
+    Size: "L",
+    Materials: ["Cotton"],
+  },
+
+  {
+    Name: "GUE88 UNIVERSITY OFF WHITE TEE",
+    Price: 1133.04,
+    ImageURL: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    Description: "GUE88 University. Official 88 x Guess collaboration featured at Head in the Clouds.",
+    Size: "M",
+    Materials: ["Cotton"],
+  },
+
+  {
+    Name: "88 TYPE R - JACQUARD STRIPE WORK SHIRT",
+    Price: 3126.89,
+    ImageURL: "https://shop.88rising.com/cdn/shop/files/StripedButtonDownShirt-F2png_3000.png?v=1710376212&width=1200",
+    Description: "AVAILABLE FOR PURCHASE IN US ONLY.",
+    Size: "XL",
+    Materials: ["Cotton/polyester"],
+  },
+
+
 ];
 
 async function insertData() {
