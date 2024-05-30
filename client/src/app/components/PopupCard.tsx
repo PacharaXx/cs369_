@@ -93,35 +93,35 @@ const PopupCard: React.FC<PopupCardProps> = ({
       <Modal.Body className="d-flex flex-column gap-3">
         <Form className="d-flex flex-column gap-3">
           <Form.Group className="mb-1">
-            <Form.Label>Product Name</Form.Label>
+            <Form.Label>Shirt Name</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter product name"
+              placeholder="Enter shirt name"
               value={productName}
               onChange={(e) => setProductName(e.target.value)}
             />
           </Form.Group>
           <Form.Group className="mb-1">
-            <Form.Label>Product Price</Form.Label>
+            <Form.Label>Shirt Price</Form.Label>
             <Form.Control
               type="number"
-              placeholder="Enter product price"
+              placeholder="Enter shirt price"
               value={productPrice}
               onChange={(e) => setProductPrice(e.target.value)}
             />
           </Form.Group>
           <Form.Group className="mb-1">
-            <Form.Label>Product Description</Form.Label>
+            <Form.Label>Shirt Description</Form.Label>
             <Form.Control
               as="textarea"
-              placeholder="Enter product description"
+              placeholder="Enter shirt description"
               style={{ height: "100px" }}
               value={productDescription}
               onChange={(e) => setProductDescription(e.target.value)}
             />
           </Form.Group>
           <Form.Group className="mb-1">
-            <Form.Label>Product Image</Form.Label>
+            <Form.Label>Shirt Image</Form.Label>
             <InputGroup>
               <FormControl
                 type="file"
@@ -131,12 +131,12 @@ const PopupCard: React.FC<PopupCardProps> = ({
             </InputGroup>
           </Form.Group>
           <Form.Group className="mb-1">
-            <Form.Label>Product Materials</Form.Label>
+            <Form.Label>Shirt Materials</Form.Label>
             {materials.map((material, index) => (
               <InputGroup key={index} className="mb-1">
                 <FormControl
                   type="text"
-                  placeholder="Enter product material"
+                  placeholder="Enter shirt material"
                   value={material}
                   onChange={(e) => handleMaterialChange(index, e.target.value)}
                 />
@@ -160,8 +160,8 @@ const PopupCard: React.FC<PopupCardProps> = ({
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" onClick={handleSubmit}>
-          Add Product
+        <Button  variant="success" onClick={handleSubmit}>
+          Add Shirt
         </Button>
       </Modal.Footer>
     </Modal>

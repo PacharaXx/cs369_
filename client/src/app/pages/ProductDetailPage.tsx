@@ -57,7 +57,7 @@ const ProductsPage = () => {
   return (
     <Container className="d-flex flex-wrap gap-3 mt-3">
       <Container className="d-flex flex-wrap gap-3 justify-content-between border-bottom border-2 p-3 w-100">
-        <h2>Product Detail</h2>
+        <h2>Shirt Detail</h2>
         {/* Optional: Add a Reload button if needed */}
         <div className="d-flex gap-3 align-items-center">
           <a
@@ -75,7 +75,7 @@ const ProductsPage = () => {
       <Container className="d-flex flex-wrap gap-3 justify-content-center h-md-70">
         {/* Display product detail components */}
         {data && data.product && (
-          <Container className="grid-container border d-flex p-0 m-0 h-md-70">
+          <Container className="shadow -sm grid-container border d-flex p-0 m-0 h-md-70">
             <Row className="p-0 m-0 w-100 h-md-70">
               <Col
                 md={6}
@@ -117,24 +117,7 @@ const ProductsPage = () => {
                   <span> {data.product.Price} ฿</span>
                 </span>
                 <div className="d-flex gap-3 mt-3 justify-content-center w-100">
-                  <Button
-                    variant="primary"
-                    className="w-50"
-                    onClick={() => {
-                      alert("Sorry, this feature is not available yet.");
-                    }}
-                  >
-                    Add to Cart
-                  </Button>
-                  <Button
-                    variant="success"
-                    className="w-50"
-                    onClick={() => {
-                      alert("Sorry, this feature is not available yet.");
-                    }}
-                  >
-                    Buy Now
-                  </Button>
+                  
                 </div>
               </Col>
             </Row>
