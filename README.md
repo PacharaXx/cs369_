@@ -23,3 +23,7 @@ Assignment in cs369
 [![YouTube Video](https://img.youtube.com/vi/QRq5VhbEvvU/0.jpg)](https://www.youtube.com/watch?v=QRq5VhbEvvU) 
 # DEMO VIDEO
 [![YouTube Video](https://img.youtube.com/vi/eSf_dKkUaS8/0.jpg)](https://www.youtube.com/watch?v=eSf_dKkUaS8)
+# Group members
+นายภคนรรท์ ตันติวุฒิ 6309680061
+นายพชร มูลเงิน 6309680053
+นายธีรพงษ์ นพศิริรัตน์ 6309680111
