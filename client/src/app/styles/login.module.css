@@ -22,19 +22,8 @@
 
 .backgroundRadialGradient {
   min-height: 100vh;
-  background-color: hsl(218, 41%, 15%);
-  background-image: radial-gradient(650px circle at 0% 0%,
-      hsl(218, 41%, 35%) 15%,
-      hsl(218, 41%, 30%) 35%,
-      hsl(218, 41%, 20%) 75%,
-      hsl(218, 41%, 19%) 80%,
-      transparent 100%),
-    radial-gradient(1250px circle at 100% 100%,
-      hsl(218, 41%, 45%) 15%,
-      hsl(218, 41%, 30%) 35%,
-      hsl(218, 41%, 20%) 75%,
-      hsl(218, 41%, 19%) 80%,
-      transparent 100%);
+  background-color: #fafafc;
+  
 }
 
 .radiusshape1 {
@@ -70,6 +59,11 @@
   padding: 25px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   margin: 0 auto;
+}
+
+.bgglass1 {
+background-image: url(/client/src/app/image/pic1.jpg);
+
 }
 
 .columnWrapper {
@@ -110,3 +104,4 @@
   align-items: center;
   margin-top: 20px;
 }
+

@@ -3,7 +3,14 @@ import axios from "axios";
 import CardComponent from "../components/CardComponent";
 import PopupCard from "../components/PopupCard";
 import { Button, Container } from "react-bootstrap";
-
+import  "../styles/Product.css";
+import {
+  MDBContainer,
+  MDBRow,
+  MDBCard,
+  MDBCardBody,
+  MDBInput,
+} from "mdb-react-ui-kit";
 export default function ProductsPage() {
   const [data, setData] = React.useState(null);
   const [isOpened, setIsOpened] = React.useState(false);
@@ -38,13 +45,14 @@ export default function ProductsPage() {
 
   return (
     
-    <Container className="d-flex flex-wrap gap-3 mt-3">
+    <Container className="backgroundRadialGradient">
       <Container className="d-flex flex-column gap-3 justify-content-center align-items-center">
         <Container className="d-flex flex-wrap gap-3 justify-content-between border-bottom border-2 p-3 w-100">
-          <h2>Product List</h2>
+          <h2>Shirt List</h2>
+          
           <div className="d-flex gap-3 align-items-center">
             <a onClick={() => setIsOpened(true)} style={{ cursor: "pointer" }}>
-              Add Product
+            Add your shirt
             </a>
             <a>|</a>
             <a onClick={() => handleLogout()} style={{ cursor: "pointer" }}>
@@ -74,7 +82,7 @@ export default function ProductsPage() {
         </Container>
       </Container>
       <PopupCard
-        title="Add New Product"
+        title="Add New Shirt"
         isOpened={isOpened}
         onClose={() => setIsOpened(false)} // Pass the onClose prop
         onReloadItems={() => {
@@ -83,5 +91,6 @@ export default function ProductsPage() {
         }} // Pass the onReloadItems prop
       />
     </Container>
+    
   );
 }
