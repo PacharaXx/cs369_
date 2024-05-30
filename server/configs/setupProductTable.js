@@ -14,29 +14,14 @@ const config = {
 
 const data = [
   {
-    Name: "Wooden Table",
-    Price: 150.0,
-    ImageURL: "http://example.com/images/table.jpg",
-    Description: "A beautiful wooden table",
-    Size: "Medium",
-    Materials: ["Wood", "Metal"],
+    Name: "YAHWEH YIREH",
+    Price: 350.0,
+    ImageURL: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    Description: "A black shirt will be and probably will be a style that can be worn for many occasions and is comfortable to wear for work or leisure activities.",
+    Size: "L",
+    Materials: ["cotton"],
   },
-  {
-    Name: "Glass Vase",
-    Price: 20.0,
-    ImageURL: "http://example.com/images/vase.jpg",
-    Description: "A delicate glass vase",
-    Size: "Small",
-    Materials: ["Glass"],
-  },
-  {
-    Name: "Leather Sofa",
-    Price: 500.0,
-    ImageURL: "http://example.com/images/sofa.jpg",
-    Description: "A luxurious leather sofa",
-    Size: "Large",
-    Materials: ["Leather", "Wood"],
-  },
+  
 ];
 
 async function insertData() {
