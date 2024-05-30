@@ -160,7 +160,7 @@ const PopupCard: React.FC<PopupCardProps> = ({
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" onClick={handleSubmit}>
+        <Button  variant="success" onClick={handleSubmit}>
           Add Shirt
         </Button>
       </Modal.Footer>
