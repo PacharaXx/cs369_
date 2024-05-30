@@ -22,7 +22,8 @@ sudo npm install pm2 -g
 cd /home/ec2-user
 
 # Clone the repository
-git clone -b develop/origin https://github.com/PacharaXx/cs369_.git
+# git clone -b develop/origin https://github.com/PacharaXx/cs369_.git
+git clone https://github.com/PacharaXx/cs369_.git
 
 # Navigate to the project directory
 cd cs369_/server
