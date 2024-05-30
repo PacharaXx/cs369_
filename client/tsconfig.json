@@ -1,27 +1,33 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
+    "lib": ["dom", "dom.iterable", "esnext"], // Include library files for DOM and ESNext features
+    "allowJs": true, // Allow JavaScript files to be compiled
+    "skipLibCheck": true, // Skip type checking of all declaration files
+    "strict": true, // Enable all strict type-checking options
+    "noEmit": true, // Disable emitting files from the compiler
+    "esModuleInterop": true, // Enable emit interoperability between CommonJS and ES Modules
+    "module": "esnext", // Specify module code generation: 'ESNext'
+    "moduleResolution": "node", // Use Node.js module resolution algorithm
+    "resolveJsonModule": true, // Include modules imported with .json extension
+    "isolatedModules": true, // Ensure each file can be safely transpiled without relying on other imports
+    "jsx": "preserve", // Preserve JSX as part of the output to be further processed by another transform step (e.g., Babel)
+    "incremental": true, // Enable incremental compilation for faster subsequent builds
     "plugins": [
       {
-        "name": "next"
+        "name": "next" // Include the Next.js TypeScript plugin
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@product/*": ["./src/pages/ProductDetailPage.tsx"]
+      "@/*": ["./src/app/*"], // Define alias for importing modules from 'src' directory
+      "@product/*": ["./src/pages/ProductDetailPage/*"] // Define alias for 'ProductDetailPage' components
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts", // Include Next.js type definitions
+    "**/*.ts", // Include all TypeScript files
+    "**/*.tsx", // Include all TypeScript React files
+    ".next/types/**/*.ts", // Include Next.js types generated in the build process
+    "next.config.mjs" // Include Next.js configuration file
+  ],
+  "exclude": ["node_modules"] // Exclude 'node_modules' from the compilation
 }

@@ -63,6 +63,7 @@ export default function Home() {
           element={isLoggedIn ? <ProductsPage /> : <LoginPage />}
         />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>

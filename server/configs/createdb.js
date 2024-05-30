@@ -20,18 +20,8 @@ console.log(config);
 
 const users = [
   {
-    username: "john_doe",
-    email: "john.doe@example.com",
-    password: "password1",
-  },
-  {
-    username: "jane_smith",
-    email: "jane.smith@example.com",
-    password: "password2",
-  },
-  {
-    username: "voy",
-    email: "asd@example.cpm",
+    username: "admin",
+    email: "admin@example.cpm",
     password: "voy1",
   },
 ];

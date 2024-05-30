@@ -78,7 +78,7 @@ INSERT INTO ProductMaterials (ProductID, MaterialID) VALUES (1, 2);
   } catch (error) {
     console.error("Error creating table:", error);
   } finally {
-    sql.close();
+    
   }
 }
 
