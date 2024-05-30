@@ -117,24 +117,7 @@ const ProductsPage = () => {
                   <span> {data.product.Price} ฿</span>
                 </span>
                 <div className="d-flex gap-3 mt-3 justify-content-center w-100">
-                  <Button
-                    variant="primary"
-                    className="w-50"
-                    onClick={() => {
-                      alert("Sorry, this feature is not available yet.");
-                    }}
-                  >
-                    Add to Cart
-                  </Button>
-                  <Button
-                    variant="success"
-                    className="w-50"
-                    onClick={() => {
-                      alert("Sorry, this feature is not available yet.");
-                    }}
-                  >
-                    Buy Now
-                  </Button>
+                  
                 </div>
               </Col>
             </Row>
